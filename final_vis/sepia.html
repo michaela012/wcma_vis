@@ -1,0 +1,46 @@
+<script src="https://d3js.org/d3.v3.js"></script>
+<style>
+body {
+  background: #eee;
+  margin: 2px;
+}
+img {
+  border-radius: 4px;
+  padding: 2px;
+}
+</style>
+<script>
+d3.json("sepia.json", function(error, data) {
+  // filter out posts without a thumbnail
+  var imageList = [];
+  var images = data.children.filter(function(d) {
+    d.children.filter(function (dd){
+      //console.log(dd.img);
+      imageList.push(dd.img);
+    })
+  });
+
+  console.log(imageList);
+
+  imageList.forEach(function(img) {
+    d3.select("body")
+      .append("a")
+      .attr("href", img)
+      .append("img")
+      .attr({
+        height: 50,
+        src: img
+      });
+  });
+
+  var setEvents = images.on('mouseenter', function (d) {
+    d3.select("h1").html("Title: " + titleFinal); 
+    d3.select("h2").html("<img src=" + d.img + " style= \"width:200px; height:300px;\">" );
+    d3.select("h3").html("<b>Maker:</b> " + d.maker + "<br>" + 
+                                    "<b>Medium:</b> " + d.maker + "<br>" + 
+                                    "<b>Creation Date:</b> " + Math.floor(d.creation_date/1) + "<br>" + 
+                                    "<b>Accession Date:</b> " + d.accession_date)
+  });
+
+});
+</script>
