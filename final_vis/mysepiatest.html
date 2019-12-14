@@ -4,28 +4,22 @@
       body {
         background-color: #323232;
         font-family: "Source Code Pro", Consolas, monaco, monospace; 
-        font-weight: normal;
         line-height: 160%; 
         font-size: 13px;  
         margin: 2px 0; 
       }
       
       header {
-        background-color: #323232; padding: 20px; top:0; left:0; font-weight: normal;
+        background-color: #323232; padding: 20px; top:0; left:0;
       }
       
       header, a{
         color:#eee;
-        font-weight: normal;
       }
 
 
 body, a {
-    color: #323232;
-}
-
-img{
-  border-radius: 3px;
+    color: #000;
 }
 
 .grid {
@@ -66,26 +60,15 @@ img{
 </style>
 
   <header>
-    <h1> SEPIA: hover to view image details!</h1>
-    <h3> View other colors:  </h3>
+    <h1> Sepia: hover to view image details!</h1>
+    <h3> View other colors: LINKS </h3>
   </header>
 
   <body>
 
 <script>
 d3.json("mysepia.json", function(data) {
-  d3.select("h1").html("SEPIA: hover over image to view details!")
-  //--- easier change for colorfill
-  h3arg = " <b>View other colors: </b> &nbsp <br>"
-                                      colors = ["red","yellow","orange","green","cyan","blue","purple","magenta","black","white"]
-                                      for (color=0; color < 10; color++){
-                                        h3arg += "   <a href="+ colors[color] + ".html>" +
-                                            "<img src=label_images/"+ colors[color] + ".jpg width=40 height=40> </a>";
-                                      }
-                                      h3arg += "<a href=home.html>" +
-                                            "<img src=label_images/complete_collection.jpg width=90 height=40</a>";
-                                      d3.select("h3").html(h3arg);
-
+  console.log(data);
   grid = d3.select("body")
     .append("div")
     .attr("id", "grid")
@@ -131,10 +114,8 @@ d3.json("mysepia.json", function(data) {
               else finalMedium = d.medium;
               titleFinal += titleComp;
 
-     d3.select(this).append("h2").html(titleFinal + "<br> <img src=" + d.img + " style= \"height:200px;\">" + 
-              "<br> Maker: " + d.maker + "<br> <b>Medium:</b> " + 
-              finalMedium + "<br><b>Creation Date:</b> " + Math.floor(d.creation_date, 1) +
-              "<br><b>Accession Date:<b> " + d.accession_date);
+     d3.select(this).append("h2").html(titleFinal + "<br> <img src=" + d.img + " style= \"height:200px;\">" + "<br> Maker: " + d.maker + "<br> <b>Medium:</b> " +
+              finalMedium + "<br><b>Creation Date:</b> " + d.creation_date);
    })
    .on("mouseleave", function(d){
      d3.select(this).select("h2").remove();
@@ -145,6 +126,29 @@ d3.json("mysepia.json", function(data) {
    .append("div")
    .attr("class", "charContent");
   
+  /*content
+   .append("h2")
+   .text(function(d,i){
+     return d.title;
+   })
+  ;*/
+
+
+  /*var setEvents = data.children
+   .on ("mouseenter", function(d){
+      console.log("got here");
+      setEvents
+        .append("h2")
+        .text(function(d,i){
+          return d.title;
+        })
+      ;
+      //setEvents.append(d.title);
+   })
+    .on ("mouseleave", function(){
+      setEvents
+        .select("h2").remove();
+    });*/
 })
 
 

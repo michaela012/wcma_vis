@@ -1,0 +1,71 @@
+<script src="https://d3js.org/d3.v3.js"></script>
+<style>
+    @import url(http://fonts.googleapis.com/css?family=Source+Code+Pro:400,600);
+        body {
+          background-color: #323232;
+          font-family: "Source Code Pro", Consolas, monaco, monospace; 
+          font-weight: normal;
+          line-height: 160%; 
+          font-size: 25px;  
+          margin: 20%; 
+        }
+        
+        header {
+          background-color: #323232; padding: 20px; top:0; left:0; font-weight: normal;
+          position:absolute; left: auto; top: 20%;
+        }
+        
+        header, a{
+          color:#eee;
+          font-weight: normal;
+        }
+
+        
+  
+  a:link { font-size: 18px; color: #8adfdc; text-decoration: none; align-content: center;}
+  a:visited { font-size: 18px; color: #8adfdc; }
+  a:hover { color: #A4CD39;}
+
+  h3:hover{ 
+    color: #323232; text-decoration: none;
+  }
+  
+  body, a {
+      color: #323232;
+  }
+  
+  img{
+    border-radius: 3px;
+  }
+
+  </style>
+
+
+  <header>
+    <h1>
+      WCMA: EXPLORE THE COLLECTION
+    </h1>
+    <h2>
+      <br>&nbsp&nbsp select a color family to begin:
+    </h2>
+    <h3>
+
+    </h3>
+
+    <h2>
+        &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+      <a href=overview.html> learn more about the project </a> 
+    </h2>
+  </header>
+
+  <script>
+    h3arg = "&nbsp &nbsp &nbsp &nbsp ";
+    colors = ["red","orange","yellow","green","cyan","blue","purple","magenta","black","white","sepia"];
+      for (color=0; color < 11; color++){
+        h3arg += "<a href="+ colors[color] + ".html>" +
+            "<img src=label_images/"+ colors[color] + ".jpg width=40 height=40> </a>";
+
+      }
+      d3.select("h3").html(h3arg);
+
+  </script>

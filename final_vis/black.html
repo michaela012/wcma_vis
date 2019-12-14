@@ -7,7 +7,7 @@
 
     <style>
       @import url(http://fonts.googleapis.com/css?family=Source+Code+Pro:400,600);
-      body {font-family: "Source Code Pro", Consolas, monaco, monospace; line-height: 160%; font-size: 16px;  margin: 0; }
+      body {background-color: #323232;font-family: "Source Code Pro", Consolas, monaco, monospace; line-height: 160%; font-size: 16px;  margin: 0; }
       path.link {
         fill: none;
         stroke-width: 2px;
@@ -18,10 +18,30 @@
       h1 { font-size: 22px; margin: 5px 0; text-transform: uppercase; font-weight: normal;}
       h2, h3 { font-size: 15px; margin: 2px 0 ; font-weight: normal;}
       header {padding: 20px; position: absolute; top: 0; left: 0;}
+      header,a{ color:#ccc;}
       a:link { color: #EE3124; text-decoration: none;}
       a:visited { color: #EE3124; }
-      a:hover { color: #A4CD39; text-decoration: underline;}
+      a:hover { color: #A4CD39; text-decoration: none;}
       a:active { color: #EE3124; }
+      img {border-radius: 3px;}
+      .node:img {z-index: 2000;}
+
+
+      .svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 200%;  /*aspect ratio */
+  vertical-align: top;
+  overflow: hidden;
+}
+.svg-content-responsive {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left:0;
+}
+
     </style>
 </head>
     
@@ -36,14 +56,18 @@
     <section id="vis"></section> 
 <script>
 
+var mycolor = "black";
+
+JSON_FILENAME = mycolor + ".json";
+
 
 // some colour variables
 var tcBlack = "#130C0E";
 
 // rest of vars
-var w = 1400,
-    h = 900,
-    maxNodeSize = 40,
+var w = 1450,
+    h = 880,
+    maxNodeSize = 20,
     x_browser = 20,
     y_browser = 25,
     root;
@@ -52,12 +76,25 @@ var vis;
 var force = d3.layout.force(); 
 
 
-vis = d3.select("#vis").append("svg").attr("width", w).attr("height", h);
+vis = d3.select("#vis")
+  //.append("div")
+  //.classed("svg-container", true) 
+   .append("svg").attr("width",1500).attr("height",1100)
+   // Responsive SVG needs these 2 attributes and no width and height attr.
+   /*.attr("preserveAspectRatio", "xMinYMin meet")
+   .attr("viewBox", "-50 0 1500 1100")
+   // Class to make it responsive.
+   .classed("svg-content-responsive", false)
+   .classed("svg-content", true);
+   // Fill with a rectangle for visualization.
+   
+   //.attr("height", 400);
+  //.append("svg").attr("width", w).attr("height", h);*/
  
-d3.json("black.json", function(json) {
+d3.json(JSON_FILENAME, function(json) {
  
   root = json;
-  root.fixed = true;
+  root.fixed = true; 
   root.x = w / 2;
   root.y = h / 4;
  
@@ -78,6 +115,8 @@ d3.json("black.json", function(json) {
  *   
  */ 
 function update() {
+  var colors = ["red","orange","yellow","green","cyan","blue","purple","magenta","white","sepia"]
+
   var nodes = flatten(root),
       links = d3.layout.tree().links(nodes);
     
@@ -85,10 +124,10 @@ function update() {
   // Restart the force layout.
   force.nodes(nodes)
         .links(links)
-        .gravity(0.4)
+        .gravity(.4)
     .charge(-600)
     .linkDistance(100)
-    .friction(0.5)
+    .friction(.5)
     .linkStrength(function(l, i) {return 1; })
     .size([w, h])
     .on("tick", tick)
@@ -101,7 +140,7 @@ function update() {
     path.enter().insert("svg:path")
       .attr("class", "link")
       // .attr("marker-end", "url(#end)")
-      .style("stroke", "#eee");
+      .style("stroke", "#444");
  
  
   // Exit any old paths.
@@ -123,19 +162,22 @@ function update() {
  
   // Append a circle
   nodeEnter.append("svg:circle")
-      .attr("r", function(d) { return Math.sqrt(d.size) / 60 || 4.5; })
-      .style("fill", "#eee");
+      .attr("r", function(d) { return Math.sqrt(d.size) / 100 || 4.5; })
+      .style("fill", "#444");
  
-   
+  var colorList = [mycolor, "light", "dark"];
   // Append images
   var images = nodeEnter.append("svg:image")
         .attr("xlink:href",  function(d) { return d.img;})
         .attr("x", function(d) { return -25;})
         .attr("y", function(d) { return -25;})
-        .attr("height", 30)
-        .attr("width", 30);
+        .attr("height", function(d){ 
+          if (colorList.includes(d.name)) return 40; else return 30;})
+        .attr("width", function(d){
+          if (colorList.includes(d.name)) return 40; else return 30;
+        });
   
-  var colorList = ["black", "light", "dark"];
+ 
   // make the image grow a little on mouse over and add the text details on click
   var setEvents = images
           // Append hero text
@@ -166,7 +208,7 @@ function update() {
               else finalMedium = d.medium;
               titleFinal += titleComp;
               d3.select("h1").html("Title: " + titleFinal); 
-              d3.select("h2").html("<img src=" + d.img + " style= \"width:200px; height:300px;\">" );
+              d3.select("h2").html("<img src=" + d.img + " style= \"width:300px; \">" );
               d3.select("h3").html("<b>Maker:</b> " + d.maker + "<br>" + 
                                     "<b>Medium:</b> " + finalMedium + "<br>" + 
                                     "<b>Creation Date:</b> " + Math.floor(d.creation_date/1) + "<br>" + 
@@ -174,19 +216,29 @@ function update() {
                                     );} else{
                                       d3.select("h1").html("Toggled: " + d.name);
                                       d3.select("h2").html("Click on an image or color <br> family to view details!");
-                                      d3.select("h3").html("");
-                                    }
+                                      
+                                      //--- easier change for colorfill
+                                      h3arg = " <br><b>View other colors:</b> <br>  &nbsp"
+                                      for (color=0; color < 10; color++){
+                                        h3arg += "   <a href="+ colors[color] + ".html>" +
+                                            "<img src=label_images/"+ colors[color] + ".jpg width=40 height=40</a>";
+                                        if (color % 2 == 1) h3arg += "<br> &nbsp ";
+                                      }
+                                      h3arg += "<a href=home.html>" +
+                                            "<img src=label_images/complete_collection.jpg width=90 height=40</a>"
+                                      d3.select("h3").html(h3arg);
+                                  }
               
               })
 
-          .on( 'mouseenter', function() {
+          .on( 'mouseenter', function(d) {
             // select element in current context
             d3.select( this )
               .transition()
               .attr("x", function(d) { return -60;})
               .attr("y", function(d) { return -60;})
-              .attr("height", 100)
-              .attr("width", 100);
+              .attr("height", 120)
+              .attr("width", 120);
           })
           // set back
           .on( 'mouseleave', function() {
@@ -194,18 +246,15 @@ function update() {
               .transition()
               .attr("x", function(d) { return -25;})
               .attr("y", function(d) { return -25;})
-              .attr("height", 50)
-              .attr("width", 50);
+              .attr("height", function(d){
+                if (colorList.includes(d.name)) return 40; else return 30;
+              })
+              .attr("width", function(d){
+                if (colorList.includes(d.name)) return 40; else return 30;
+              });
           });
+          
 
-  // Append hero name on roll over next to the node as well
-  nodeEnter.append("text")
-      .attr("class", "nodetext")
-      .attr("x", x_browser)
-      .attr("y", y_browser +15)
-      .attr("fill", tcBlack)
-      .text(function(d) { return d.hero; });
- 
  
   // Exit any old nodes.
   node.exit().remove();
@@ -232,6 +281,17 @@ function tick() {
   }
 }
 
+var body = d3.select(this);
+
+function resize(){
+            var width = $('#body').width();
+            var height = $('#body').height();
+
+            vis.attr("width", width);
+            vis.attr("height", height);
+            force.size([width, height]).resume();
+          }
+body.on("resize",resize);
  
 /**
  * Gives the coordinates of the border for keeping the nodes inside a frame

@@ -1,0 +1,88 @@
+<script src="https://d3js.org/d3.v3.js"></script>
+<style>
+  @import url(http://fonts.googleapis.com/css?family=Source+Code+Pro:400,600);
+
+  body {
+    background-color: #323232;
+    font-family: "Source Code Pro", Consolas, monaco, monospace;
+    font-weight: normal;
+    line-height: 160%;
+    font-size: 15px;
+    margin-left: 15%; margin-top: 10%; margin-right: 15%;
+    align-content: center;
+  }
+
+  a:link { font-size: 14px; color: #8adfdc; text-decoration: none; align-content: center;}
+  a:visited { font-size: 14px; color: #8adfdc; }
+  a:hover { color: #A4CD39; text-decoration: underline;}
+
+  header {
+    background-color: #323232;
+    top: 0;
+    left: 0;
+    font-weight: normal; 
+  }
+
+  header,
+  a {
+    color: #eee;
+    font-weight: normal;
+    align-content: center;}
+    h2{ align-content: center;
+  }
+
+  body,
+  a {
+    color: #eee;
+    font-size: 14px;
+  }
+
+  img {
+    border-radius: 3px;
+  }
+</style>
+
+
+<header>
+  <h1>
+    notes on piece information:
+  </h1>
+
+</header>
+
+<body>
+  <p> <br> 
+    The metadata displayed for each piece includes (when available) a thumbnail image, title, maker, medium, creation date, and accession date.</p>
+  <p>
+    This data is drawn directly from WCMA's and is presented in its unaltered form, with the exception of the creation date. An exact date is 
+    not known for each piece, and in this case, the date displayed is the midpoint of the possible creation date range. More extensive metadata for
+    each piece can be found by searching for the piece title in <a href=https://wcma.williams.edu/collection>WCMA's database</a> directly.  
+    </p>
+  <p>
+    Color classifications are based on dominant image color, found using k-means clustering, with exceptions for images where the dominant hue
+    is in the sepia range. This is to prevent the sepia category from becoming too large to be useful as a classification. To handle these 
+    cases, the top three dominant colors are found for each image. If the most dominant color is sepia, the second-dominant is used for classification.
+    If that too is sepia, the third is used. An image is classified as sepia only if all three of the most dominant colors fall into that range. 
+    It's still a very large number of images, so don't neglect them! View the special collection of sepia images <a href=sepia.html> here</a>, 
+    and read more about the color classification process  <a href=https://michaela012.github.io/is-project/2019-11-08-week07> here</a>. 
+  </p>
+
+  <p> 
+    Additionally: thanks and credit to the work of <a href=http://bl.ocks.org/mbostock/1062288>Mike Bostock</a>, <a href= https://bl.ocks.org/eesur>Sundar Singh</a>,
+     and <a href=https://bl.ocks.org/Paul-Brady>Paul Brady</a>, a combination of which formed the starter code for the main color graphs layout, and to Andy Barefoot's 
+     <a href=https://medium.com/@andybarefoot/d3-and-css-grid-with-expanding-content-3c8aaf783cb1> Medium post</a> for a tutorial on D3 grid basics.
+
+  </p>
+  
+  <p> <br> For more information, read the project overview <a href=overview.html> here</a>,
+      an informal history of the development process <a href= https://michaela012.github.io/is-project> here</a>,
+      project code <a href=https://github.com/michaela012/wcma_vis> here</a>, or dive in to the collection!</p>
+
+  <h2>
+      <br>start exploring:
+    </h2>
+    <h3>
+        &nbsp&nbsp 
+      <a href=home.html> <img src=label_images/complete_collection.jpg width=120 height=60> </a>
+    </h3>
+</body>
