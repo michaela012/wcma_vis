@@ -29,17 +29,22 @@
 
       .svg-container {
   display: inline-block;
-  position: relative;
+  position: absolute;
   width: 100%;
-  padding-bottom: 200%;  /*aspect ratio */
-  vertical-align: top;
-  overflow: hidden;
+  height: 100%;
+  /*padding-bottom: 0%;*/  /*aspect ratio */
+  vertical-align: center;
+  /*overflow: hidden;*/
 }
 .svg-content-responsive {
   display: inline-block;
   position: absolute;
   top: 0;
   left:0;
+}
+
+html, body {
+    min-height:100%;
 }
 
     </style>
@@ -79,17 +84,16 @@ var force = d3.layout.force();
 vis = d3.select("#vis")
   //.append("div")
   //.classed("svg-container", true) 
-   .append("svg").attr("width",1500).attr("height",1100)
+   .append("svg")//.attr("width",1500).attr("height",1100)
    // Responsive SVG needs these 2 attributes and no width and height attr.
-   /*.attr("preserveAspectRatio", "xMinYMin meet")
-   .attr("viewBox", "-50 0 1500 1100")
+   .attr("preserveAspectRatio", "xMinYMin meet")
+   .attr("viewBox", "-50 0 1500 1100") //1500 1100
    // Class to make it responsive.
    .classed("svg-content-responsive", false)
    .classed("svg-content", true);
-   // Fill with a rectangle for visualization.
    
-   //.attr("height", 400);
-  //.append("svg").attr("width", w).attr("height", h);*/
+   
+  //.append("svg").attr("width", w).attr("height", h);
  
 d3.json(JSON_FILENAME, function(json) {
  
@@ -280,18 +284,6 @@ function tick() {
     node.attr("transform", nodeTransform);    
   }
 }
-
-var body = d3.select(this);
-
-function resize(){
-            var width = $('#body').width();
-            var height = $('#body').height();
-
-            vis.attr("width", width);
-            vis.attr("height", height);
-            force.size([width, height]).resume();
-          }
-body.on("resize",resize);
  
 /**
  * Gives the coordinates of the border for keeping the nodes inside a frame
