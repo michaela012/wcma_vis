@@ -8,7 +8,7 @@
     font-weight: normal;
     line-height: 160%;
     font-size: 15px;
-    margin-left: 15%; margin-top: 10%; margin-right: 15%;
+    margin-left: 15%; margin-top: 5%; margin-right: 15%; margin-bottom:10%;
     align-content: center;
   }
 
@@ -17,18 +17,21 @@
   a:hover { color: #A4CD39; text-decoration: underline;}
 
   header {
-    background-color: #323232;
-    top: 0;
+    background-color: #575757;
+    bottom: 0;
     left: 0;
+    width: 100%;
     font-weight: normal; 
+    position:fixed;
   }
 
   header,
   a {
     color: #eee;
     font-weight: normal;
-    align-content: center;}
-    h2{ align-content: center;
+    }
+    h3{ text-align: center;
+    font-size: 17px;
   }
 
   body,
@@ -44,13 +47,18 @@
 
 
 <header>
-  <h1>
-    project overview:
-  </h1>
+  <h3>
+    start exploring:
+      <br>
+    <a href=index.html> <img src=label_images/complete_collection.jpg width=100 height=50> </a>
+  </h3>
 
 </header>
 
 <body>
+  <h1>
+    project overview:
+  </h1>
   <p> <br> This project began with the goal of creating a unique, engaging way of exploring the entire
       collection at the Williams College Museum of Art (WCMA). 
     </p>
@@ -69,7 +77,7 @@
 
   <p> <br> For more information, read notes on design and information decisions <a href=notes.html> here</a>,
       an informal history of the development process <a href= https://michaela012.github.io/is-project> here</a>,
-      project code <a href=https://github.com/michaela012/wcma_vis> here</a>, or dive in to the collection!</p>
+      project code <a href=https://github.com/michaela012/wcma_vis> here</a>, or look below to dive in to the collection!</p>
   <p>
       Special thanks to my advisors,
       <a href=http://www.cs.williams.edu/~iris> Iris Howley</a> and 
@@ -77,10 +85,39 @@
   </p>
 
   <h2>
-      <br>start exploring:
-    </h2>
-    <h3>
-        &nbsp&nbsp 
-      <a href=home.html> <img src=label_images/complete_collection.jpg width=120 height=60> </a>
-    </h3>
+    <br>functionality:
+  </h2>
+  <p>
+    To start, select one of the 11 color families. Every single object in the collection can be found in one of these pages. If you
+    select any color other than sepia, you'll see a graph based structure, where each of the nodes is a picture of a collection object:
+    <br>&nbsp &nbsp &nbsp <img src=example_images/purple-open.png style="width:600px;height:400px;">
+    <br>Click on any image to see details about the object shown:
+    <br>&nbsp &nbsp &nbsp <img src=example_images/purple_banana.png style="width:600px;height:400px;">
+    <br>The display is best viewed with only one of the brightness sections expanded (there are two, "light" and "dark"). Click on
+    either the "light" or "dark" tag to toggle the visibility of that group, or on the main color tag (the central node) to toggle
+    the visibility of all icons. 
+    <br>&nbsp &nbsp &nbsp <img src=example_images/cyan_landscape.png style="width:600px;height:400px;">
+    <br>Clicking any of these nodes expands the selection panel, from which you can navigate to any other color group or back to the
+    main home page:
+    <br>&nbsp &nbsp &nbsp <img src=example_images/black-dark.png style="width:600px;height:400px;">
+
+  </p>
+
+
+
+
 </body>
+
+<script>
+  /*//--- easier change for colorfill
+  h3arg = " <b> &nbsp Start exploring: </b> &nbsp <br> &nbsp "
+                                    colors = ["red","yellow","orange","green","cyan","blue","purple","magenta","black","white"]
+                                    for (color=0; color < 10; color++){
+                                      h3arg += "   <a href="+ colors[color] + ".html>" +
+                                          "<img src=label_images/"+ colors[color] + ".jpg width=40 height=40> </a>";
+                                    }
+                                    h3arg += "<a href=index.html>" +
+                                          "<img src=label_images/complete_collection.jpg width=90 height=40</a>";
+                                    d3.select("h3").html(h3arg);*/
+ </script>
+
