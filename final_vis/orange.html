@@ -19,7 +19,7 @@
       h2, h3 { font-size: 15px; margin: 2px 0 ; font-weight: normal;}
       header {padding: 20px; position: absolute; top: 0; left: 0;}
       header,a{ color:#ccc;}
-      a:link { color: #EE3124; text-decoration: none;}
+      a:link { color: #8adfdc; text-decoration: none;}
       a:visited { color: #EE3124; }
       a:hover { color: #A4CD39; text-decoration: none;}
       a:active { color: #EE3124; }
@@ -212,7 +212,8 @@ function update() {
               titleFinal += titleComp;
               d3.select("h1").html("Title: " + titleFinal); 
               d3.select("h2").html("<img src=" + d.img + " style= \"width:300px; \">" );
-              d3.select("h3").html("<b>Maker:</b> " + d.maker + "<br>" + 
+              var maker_split = d.maker.split(" ").join("_");
+              d3.select("h3").html("<b>Maker:</b> <a href=https://en.wikipedia.org/wiki/" + maker_split + ">" + d.maker + "</a><br>" + 
                                     "<b>Medium:</b> " + finalMedium + "<br>" + 
                                     "<b>Creation Date:</b> " + Math.floor(d.creation_date/1) + "<br>" + 
                                     "<b>Accession Date:</b> " + d.accession_date
