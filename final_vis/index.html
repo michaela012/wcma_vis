@@ -12,12 +12,13 @@
         
         header {
           background-color: #323232; padding: 20px; top:0; left:0; font-weight: normal;
-          position:absolute; left: auto; top: 20%;
+          position:absolute; left: auto; top: 20%; text-align: center;
         }
         
         header, a{
           color:#eee;
           font-weight: normal;
+          font-size: 2vw;
         }
 
         
@@ -46,20 +47,19 @@
       WCMA: EXPLORE THE COLLECTION
     </h1>
     <h2>
-      <br>&nbsp&nbsp select a color family to begin:
+      <br>select a color family to begin:
     </h2>
     <h3>
 
     </h3>
 
     <h2>
-        &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
       <a href=overview.html> learn more about the project </a> 
     </h2>
   </header>
 
   <script>
-    h3arg = "&nbsp &nbsp &nbsp &nbsp ";
+    h3arg = "";
     colors = ["red","orange","yellow","green","cyan","blue","purple","magenta","black","white","sepia"];
       for (color=0; color < 11; color++){
         h3arg += "<a href="+ colors[color] + ".html>" +
