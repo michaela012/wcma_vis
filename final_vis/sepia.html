@@ -5,9 +5,9 @@
         background-color: #323232;
         font-family: "Source Code Pro", Consolas, monaco, monospace; 
         font-weight: normal;
-        line-height: 160%; 
-        font-size: 13px;  
+        line-height: 160%;   
         margin: 2px 0; 
+        font-size: 1vh;
       }
       
       header {
@@ -17,6 +17,14 @@
       header, a{
         color:#eee;
         font-weight: normal;
+        font-size: 1vh;
+      }
+      header,h1{
+        font-size: 2.5vh;
+        line-height: normal;
+      }
+      header,h3{
+        font-size: 2vh;
       }
 
 
@@ -24,7 +32,7 @@ body, a {
     color: #323232;
 }
 
-a:link { color: #8adfdc; text-decoration: none;}
+a:link { color: #8adfdc; text-decoration: none; font-size: 1.5vh;}
       a:visited { color: #EE3124; }
       a:hover { color: #A4CD39; text-decoration: none;}
 
@@ -57,14 +65,12 @@ img{
 }.char h2 { 
    display: inline-block;
    background-color:rgba(28, 28, 28, 0.95); 
-   font-size: 120%;
    color:rgba(210,210,210,1); 
    padding: 50px 100px 50px 100px;
    position: fixed;
-    top: 20%; left: 10;
+    top: 20%; left: 10; 
    flex-wrap: wrap;
    font-weight: normal;
-    
    z-index: 10000000000000;
 }
 
@@ -82,7 +88,7 @@ img{
 d3.json("mysepia.json", function(data) {
   d3.select("h1").html("SEPIA: click on image to view (or hide) details!")
   //--- easier change for colorfill
-  h3arg = " <b>View other colors: </b> &nbsp <br>"
+  h3arg = "View other colors:<br>"
                                       colors = ["red","yellow","orange","green","cyan","blue","purple","magenta","black","white"]
                                       for (color=0; color < 10; color++){
                                         h3arg += "   <a href="+ colors[color] + ".html>" +
@@ -113,7 +119,7 @@ d3.json("mysepia.json", function(data) {
      if (d.title != last_click_title){
        last_click_title = d.title;
      d3.select("h2").remove();
-     d3.select(this).html("<img src='label_images/magenta.jpg' width=47, height=3>");
+     d3.select(this).html("<img src='label_images/magenta.jpg' width=55, height=3>");
 
      var orgTitle = d.title.split(" ");
               var titleComp = "";
@@ -142,7 +148,7 @@ d3.json("mysepia.json", function(data) {
               titleFinal += titleComp;
 
               var maker_split = d.maker.split(" ").join("_");
-     d3.select(this).append("h2").html("<b>" + titleFinal + "</b> <br> <img src=" + d.img + " style= \"height:200px;\">" + 
+     d3.select(this).append("h2").html("<b>" + titleFinal + "</b> <br> <img src=" + d.img + " style= \"height:30vh;\">" + 
      "<br> <b> Maker: </b> <a href=https://en.wikipedia.org/wiki/" + maker_split + "> " + d.maker + "</a> <b> <br> Medium: </b> " + 
               finalMedium + "<br><b>Creation Date:</b> " + Math.floor(d.creation_date, 1) +
               "<br><b>Accession Date:</b> " + d.accession_date);
@@ -153,10 +159,6 @@ d3.json("mysepia.json", function(data) {
      }
 
    })
-   /*.on("mouseleave", function(d){
-     d3.select(this).select("h2").remove();
-   })*/
-
   ;
   content = chars
    .append("div")
