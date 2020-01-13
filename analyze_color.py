@@ -53,9 +53,9 @@ need more differentiation. Sort by color, also light/dark (find brightness thres
 #   orange: 14-40
 #   yellow: 41-64
 #   green: 65-159
-#   cyan: 160-194
-#   blue: 195-259
-#   purple: 260-299
+#   cyan: 160-196
+#   blue: 197-251
+#   purple: 252-299
 #   magenta: 300-349
 ###specials- check these first
 #   black: value<12
@@ -72,7 +72,7 @@ def get_hsv(r,g,b):
 
 
 def get_color_classification(r,g,b):
-  color_class_dict = {"red":[0, 17], "red2":[350,359], "orange":[18,36], "yellow":[37,64], "green":[65,159], "cyan":[160,194], "blue":[195,259], "purple":[260,299], "magenta":[300,349]}
+  color_class_dict = {"red":[0, 17], "red2":[350,359], "orange":[18,36], "yellow":[37,64], "green":[65,159], "cyan":[160,196], "blue":[197,251], "purple":[252,299], "magenta":[300,349]}
 
   #get hsv values
   h,s,v = get_hsv(r/255,g/255,b/255)
