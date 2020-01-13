@@ -262,11 +262,9 @@ function update() {
               .transition()
               .attr("x", function(d) { return -25;})
               .attr("y", function(d) { return -25;})
-              .attr("height", function(d){
-                if (colorList.includes(d.name)) return 40; else return 30;
+              .attr("height", function(d){ return 40;
               })
-              .attr("width", function(d){
-                if (colorList.includes(d.name)) return 40; else return 30;
+              .attr("width", function(d){ return 40;
               });
           });
  
