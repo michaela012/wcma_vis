@@ -7,7 +7,7 @@
 
     <style>
       @import url(http://fonts.googleapis.com/css?family=Source+Code+Pro:400,600);
-      body {background-color: #323232;font-family: "Source Code Pro", Consolas, monaco, monospace; line-height: 160%; font-size: 16px;  margin: 0; }
+      body {background-color: #323232;font-family: "Source Code Pro", Consolas, monaco, monospace; line-height: 2vh; font-size: 16px;  margin: 0; }
       path.link {
         fill: none;
         stroke-width: 2px;
@@ -15,8 +15,9 @@
       .node:not(:hover) .nodetext {
         display: none;
       }
-      h1 { font-size: 22px; margin: 5px 0; text-transform: uppercase; font-weight: normal;}
-      h2, h3 { font-size: 15px; margin: 2px 0 ; font-weight: normal;}
+      h1 { font-size: 2vh; margin-top: 5px; text-transform: uppercase; font-weight: normal;}
+      h2, h3 { font-size: 1.5vh; margin: 2px 0 ; font-weight: normal;}
+      h3 { position: fixed; left:1; bottom: 0; margin-bottom: 0px; font-size: 2vh; background-color: #323232;}
       header {padding: 20px; position: absolute; top: 0; left: 0;}
       header,a{ color:#ccc;}
       a:link { color: #8adfdc; text-decoration: none;}
@@ -25,14 +26,15 @@
       a:active { color: #EE3124; }
       img {border-radius: 3px;}
       .node:img {z-index: 2000;}
+
       .svg-container {
   display: inline-block;
   position: absolute;
   width: 100%;
   height: 100%;
-  /*padding-bottom: 0%;*/  /*aspect ratio */
+  padding-bottom: 0%;
   vertical-align: center;
-  /*overflow: hidden;*/
+  overflow: visible;
 }
 .svg-content-responsive {
   display: inline-block;
@@ -44,7 +46,6 @@
 html, body {
     min-height:100%;
 }
-
     </style>
 </head>
     
@@ -52,8 +53,8 @@ html, body {
 <body>
     <header>
       <h1>WCMA Collection</h1>
-      <h2>Explore collection objects by color:</h2>
-      <h3>click to expand each color family!</h3>
+      <h2>Explore collection objects by color!</h2>
+      <h3></h3>
     </header>
     <!-- container for force layout visualisation  -->
     <section id="vis"></section> 
@@ -85,20 +86,31 @@ vis = d3.select("#vis")
    .append("svg")//.attr("width",1500).attr("height",1100)
    // Responsive SVG needs these 2 attributes and no width and height attr.
    .attr("preserveAspectRatio", "xMinYMin meet")
-   .attr("viewBox", "-50 0 1500 1100") //1500 1100
+   .attr("viewBox", "-70 0 1500 1100") //1500 1100
+
    // Class to make it responsive.
    .classed("svg-content-responsive", false)
    .classed("svg-content", true);
-   
-   
-  //.append("svg").attr("width", w).attr("height", h); 
+
+
+
 d3.json(JSON_FILENAME, function(json) {
  
   root = json;
-  root.fixed = true; 
+  console.log(json);
+  root.fixed = false; 
   root.x = w / 2;
-  root.y = h / 4;
+  root.y = h / 2;
+
+  light = root["children"][0];
+  light.fixed= true;
+  light.x= w/1.25;
+  light.y = w/5;
  
+  dark = root["children"][1];
+  dark.fixed = true;
+  dark.x = w/2.5;
+  dark.y = h/2;
  
         // Build the path
   var defs = vis.insert("svg:defs")
@@ -116,7 +128,20 @@ d3.json(JSON_FILENAME, function(json) {
  *   
  */ 
 function update() {
-  var colors = ["red","orange","yellow","green","blue","purple","magenta","black","white","sepia"]
+  var colors = ["dark_red","red","orange","yellow","green","blue","purple","magenta","black","white"]
+
+  var h3arg = "<br><b>View other colors:</b> "
+              for (color=0; color < 10; color++){
+                h3arg += "   <a href="+ colors[color] + ".html>" +
+                    "<img src=label_images/"+ colors[color] + ".jpg width=25 height=25</a>";
+                //if (color == 4) h3arg += "<br>";
+              }
+              h3arg += " <a href=sepia.html>" +
+                    "<img src=label_images/sepia.jpg width=60 height=25</a>" +
+                    " <a href=index.html>" +
+                    "<img src=label_images/complete_collection.jpg width=60 height=25</a> <br> &nbsp"
+
+              d3.select("h3").html(h3arg);
 
   var nodes = flatten(root),
       links = d3.layout.tree().links(nodes);
@@ -125,9 +150,9 @@ function update() {
   // Restart the force layout.
   force.nodes(nodes)
         .links(links)
-        .gravity(.4)
-    .charge(-800)
-    .linkDistance(100)
+        .gravity(.2)
+    .charge(-900)
+    .linkDistance(80)
     .friction(.5)
     .linkStrength(function(l, i) {return 1; })
     .size([w, h])
@@ -166,20 +191,22 @@ function update() {
       .attr("r", function(d) { return Math.sqrt(d.size) / 100 || 4.5; })
       .style("fill", "#444");
  
-   
+      var colorList = [mycolor, "light", "dark"];   
   // Append images
   var images = nodeEnter.append("svg:image")
         .attr("xlink:href",  function(d) { return d.img;})
         .attr("x", function(d) { return -25;})
         .attr("y", function(d) { return -25;})
-        .attr("height", 40)
-        .attr("width", 40);
+        .attr("height", function(d){ return 40;})
+        .attr("width", function(d){ return 40;
+        });
   
-  var colorList = [mycolor, "light", "dark"];
+
   // make the image grow a little on mouse over and add the text details on click
   var setEvents = images
           // Append hero text
-          .on( 'click', function (d) { if (!colorList.includes(d.name)){
+          .on( 'click', function (d) { 
+            if (!colorList.includes(d.name)){
               var orgTitle = d.title.split(" ");
               var titleComp = "";
               var titleFinal = "";
@@ -206,29 +233,19 @@ function update() {
               else finalMedium = d.medium;
               titleFinal += titleComp;
               d3.select("h1").html("Title: " + titleFinal); 
-              d3.select("h2").html("<img src=" + d.img + " style= \"width:300px; \">" );
               var maker_split = d.maker.split(" ").join("_");
-              d3.select("h3").html("<b>Maker:</b> <a href=https://en.wikipedia.org/wiki/" + maker_split + ">" + d.maker + "</a><br>" + 
+              d3.select("h2").html("<img src=" + d.img + " style= \"width:300px; \"> <br> <b>Maker:</b> <a href=https://en.wikipedia.org/wiki/" + maker_split + ">" + d.maker + "</a><br>" +  
                                     "<b>Medium:</b> " + finalMedium + "<br>" + 
                                     "<b>Creation Date:</b> " + Math.floor(d.creation_date/1) + "<br>" + 
                                     "<b>Accession Date:</b> " + d.accession_date
-                                    );} else{
-                                      d3.select("h1").html("Toggled: " + d.name);
-                                      d3.select("h2").html("Click on an image or color <br> family to view details!");
-                                      
-                                      //--- easier change for colorfill
-                                      h3arg = " <br><b>View other colors:</b> <br>  &nbsp"
-                                      for (color=0; color < 10; color++){
-                                        h3arg += "   <a href="+ colors[color] + ".html>" +
-                                            "<img src=label_images/"+ colors[color] + ".jpg width=40 height=40</a>";
-                                        if (color % 2 == 1) h3arg += "<br> &nbsp ";
-                                      }
-                                      h3arg += "<a href=index.html>" +
-                                            "<img src=label_images/complete_collection.jpg width=90 height=40</a>"
-                                      d3.select("h3").html(h3arg);
-                                  }
+                                    );
+
+            } else {
+              d3.select("h1").html("Toggled: " + d.name);
+              d3.select("h2").html("Click on an image or color <br> family to view details!");
+            }
               
-              })
+          })
 
           .on( 'mouseenter', function(d) {
             // select element in current context
@@ -245,8 +262,12 @@ function update() {
               .transition()
               .attr("x", function(d) { return -25;})
               .attr("y", function(d) { return -25;})
-              .attr("height", 40)
-              .attr("width", 40);
+              .attr("height", function(d){
+                if (colorList.includes(d.name)) return 40; else return 30;
+              })
+              .attr("width", function(d){
+                if (colorList.includes(d.name)) return 40; else return 30;
+              });
           });
  
  

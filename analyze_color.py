@@ -53,12 +53,12 @@ need more differentiation. Sort by color, also light/dark (find brightness thres
 #   orange: 14-40
 #   yellow: 41-64
 #   green: 65-159
-#   cyan: 160-183
-#   blue: 184-259
+#   cyan: 160-194
+#   blue: 195-259
 #   purple: 260-299
 #   magenta: 300-349
 ###specials- check these first
-#   black: value<15
+#   black: value<12
 #   white: saturation<5, value>95
 #   !!sepia: hue in orange range, value<70
 ##################################################################################
@@ -72,13 +72,13 @@ def get_hsv(r,g,b):
 
 
 def get_color_classification(r,g,b):
-  color_class_dict = {"red":[0, 13], "red2":[350,359], "orange":[14,36], "yellow":[37,64], "green":[65,159], "cyan":[160,183], "blue":[184,259], "purple":[260,299], "magenta":[300,349]}
+  color_class_dict = {"red":[0, 17], "red2":[350,359], "orange":[18,36], "yellow":[37,64], "green":[65,159], "cyan":[160,194], "blue":[195,259], "purple":[260,299], "magenta":[300,349]}
 
   #get hsv values
   h,s,v = get_hsv(r/255,g/255,b/255)
 
   #first check for black and white
-  if v < 15:
+  if v < 12:
     return "black"
   if s < 5 and v > 95:
     return "white"
@@ -88,8 +88,11 @@ def get_color_classification(r,g,b):
     col_range = color_class_dict[color]
     if h in range(col_range[0], col_range[1]+1):
       #handle special cases, else return color
-      if color == "red2":
-        return "red"
+      if color == "red2" or color == "red":
+        if v < 50:
+          return "dark_red"
+        else:
+          return "red"
       if (color == "orange" and (s<40 or v<30)) or (color == "yellow" and s < 40):
         return "sepia"
       return color
@@ -144,6 +147,7 @@ def run(COLOR_DETAILS_FILENAME, PIECE_INFO_FILENAME):
   all_piece_info = {}
 
   color_children = {
+    "dark_red" : [{"name":"light", "img":"label_images/light.jpg", "children":[] } , {"name":"dark", "img":"label_images/dark.jpg", "children":[] }],
     "red" : [{"name":"light", "img":"label_images/light.jpg", "children":[] } , {"name":"dark", "img":"label_images/dark.jpg", "children":[] }],
     "orange" : [{"name":"light", "img":"label_images/light.jpg", "children":[] } , {"name":"dark", "img":"label_images/dark.jpg", "children":[] }],
     "yellow" : [{"name":"light", "img":"label_images/light.jpg", "children":[] } , {"name":"dark", "img":"label_images/dark.jpg", "children":[] }],
@@ -219,6 +223,7 @@ def run(COLOR_DETAILS_FILENAME, PIECE_INFO_FILENAME):
       {"name":"black", "img":"label_images/black.jpg", "children": color_children["black"]},
       {"name":"white", "img":"label_images/white.jpg", "children": color_children["white"]},
       {"name":"sepia", "img":"label_images/sepia.jpg", "children": color_children["sepia"]},
+      {"name":"dark_red", "img":"label_images/dark_red.jpg", "children": color_children["dark_red"]}
     ]
   }
 
@@ -236,6 +241,7 @@ def run(COLOR_DETAILS_FILENAME, PIECE_INFO_FILENAME):
   write_to_json("final_vis/black.json", json_data["children"][8])
   write_to_json("final_vis/white.json", json_data["children"][9])
   write_to_json("final_vis/sepia.json", json_data["children"][10])
+  write_to_json("final_vis/dark_red.json", json_data["children"][11])
 
 
 

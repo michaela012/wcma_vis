@@ -7,7 +7,7 @@
 
     <style>
       @import url(http://fonts.googleapis.com/css?family=Source+Code+Pro:400,600);
-      body {font-family: "Source Code Pro", Consolas, monaco, monospace; line-height: 160%; font-size: 16px;  margin: 0; }
+      body {background-color: #323232;font-family: "Source Code Pro", Consolas, monaco, monospace; line-height: 2vh; font-size: 16px;  margin: 0; }
       path.link {
         fill: none;
         stroke-width: 2px;
@@ -15,13 +15,37 @@
       .node:not(:hover) .nodetext {
         display: none;
       }
-      h1 { font-size: 22px; margin: 5px 0; text-transform: uppercase; font-weight: normal;}
-      h2, h3 { font-size: 15px; margin: 2px 0 ; font-weight: normal;}
+      h1 { font-size: 2vh; margin-top: 5px; text-transform: uppercase; font-weight: normal;}
+      h2, h3 { font-size: 1.5vh; margin: 2px 0 ; font-weight: normal;}
+      h3 { position: fixed; left:1; bottom: 0; margin-bottom: 20px; font-size: 2vh;}
       header {padding: 20px; position: absolute; top: 0; left: 0;}
-      a:link { color: #EE3124; text-decoration: none;}
+      header,a{ color:#ccc;}
+      a:link { color: #8adfdc; text-decoration: none;}
       a:visited { color: #EE3124; }
-      a:hover { color: #A4CD39; text-decoration: underline;}
+      a:hover { color: #A4CD39; text-decoration: none;}
       a:active { color: #EE3124; }
+      img {border-radius: 3px;}
+      .node:img {z-index: 2000;}
+
+      .svg-container {
+  display: inline-block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 0%;
+  vertical-align: center;
+  overflow: visible;
+}
+.svg-content-responsive {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left:0;
+}
+
+html, body {
+    min-height:100%;
+}
     </style>
 </head>
     
@@ -29,21 +53,25 @@
 <body>
     <header>
       <h1>WCMA Collection</h1>
-      <h2>Explore collection objects by color:</h2>
-      <h3>click to expand each color family!</h3>
+      <h2>Explore collection objects by color!</h2>
+      <h3></h3>
     </header>
     <!-- container for force layout visualisation  -->
     <section id="vis"></section> 
 <script>
+
+var mycolor = "dark_red";
+
+JSON_FILENAME = mycolor + ".json";
 
 
 // some colour variables
 var tcBlack = "#130C0E";
 
 // rest of vars
-var w = 1400,
-    h = 900,
-    maxNodeSize = 40,
+var w = 1450,
+    h = 880,
+    maxNodeSize = 20,
     x_browser = 20,
     y_browser = 25,
     root;
@@ -52,15 +80,37 @@ var vis;
 var force = d3.layout.force(); 
 
 
-vis = d3.select("#vis").append("svg").attr("width", w).attr("height", h);
- 
-d3.json("red.json", function(json) {
+vis = d3.select("#vis")
+  //.append("div")
+  //.classed("svg-container", true) 
+   .append("svg")//.attr("width",1500).attr("height",1100)
+   // Responsive SVG needs these 2 attributes and no width and height attr.
+   .attr("preserveAspectRatio", "xMinYMin meet")
+   .attr("viewBox", "-70 0 1500 1100") //1500 1100
+
+   // Class to make it responsive.
+   .classed("svg-content-responsive", false)
+   .classed("svg-content", true);
+
+
+
+d3.json(JSON_FILENAME, function(json) {
  
   root = json;
-  root.fixed = true;
+  console.log(json);
+  root.fixed = false; 
   root.x = w / 2;
-  root.y = h / 4;
+  root.y = h / 2;
+
+  light = root["children"][0];
+  light.fixed= true;
+  light.x= w/1.25;
+  light.y = w/5;
  
+  dark = root["children"][1];
+  dark.fixed = true;
+  dark.x = w/2.5;
+  dark.y = h/2;
  
         // Build the path
   var defs = vis.insert("svg:defs")
@@ -78,6 +128,21 @@ d3.json("red.json", function(json) {
  *   
  */ 
 function update() {
+  var colors = ["red","orange","yellow","green","cyan","blue","purple","magenta","black","white"]
+
+  var h3arg = "<br><b>View other colors:</b> "
+              for (color=0; color < 10; color++){
+                h3arg += "   <a href="+ colors[color] + ".html>" +
+                    "<img src=label_images/"+ colors[color] + ".jpg width=25 height=25</a>";
+                //if (color == 4) h3arg += "<br>";
+              }
+              h3arg += " <a href=sepia.html>" +
+                    "<img src=label_images/sepia.jpg width=60 height=25</a>" +
+                    " <a href=index.html>" +
+                    "<img src=label_images/complete_collection.jpg width=60 height=25</a>"
+
+              d3.select("h3").html(h3arg);
+
   var nodes = flatten(root),
       links = d3.layout.tree().links(nodes);
     
@@ -85,10 +150,10 @@ function update() {
   // Restart the force layout.
   force.nodes(nodes)
         .links(links)
-        .gravity(0.4)
+        .gravity(.4)
     .charge(-600)
-    .linkDistance(100)
-    .friction(0.5)
+    .linkDistance(80)
+    .friction(.5)
     .linkStrength(function(l, i) {return 1; })
     .size([w, h])
     .on("tick", tick)
@@ -101,7 +166,7 @@ function update() {
     path.enter().insert("svg:path")
       .attr("class", "link")
       // .attr("marker-end", "url(#end)")
-      .style("stroke", "#eee");
+      .style("stroke", "#444");
  
  
   // Exit any old paths.
@@ -123,23 +188,27 @@ function update() {
  
   // Append a circle
   nodeEnter.append("svg:circle")
-      .attr("r", function(d) { return Math.sqrt(d.size) / 60 || 4.5; })
-      .style("fill", "#eee");
+      .attr("r", function(d) { return Math.sqrt(d.size) / 100 || 4.5; })
+      .style("fill", "#444");
  
-   
+      var colorList = [mycolor, "light", "dark"];   
   // Append images
   var images = nodeEnter.append("svg:image")
         .attr("xlink:href",  function(d) { return d.img;})
         .attr("x", function(d) { return -25;})
         .attr("y", function(d) { return -25;})
-        .attr("height", 30)
-        .attr("width", 30);
+        .attr("height", function(d){ 
+          if (colorList.includes(d.name)) return 40; else return 30;})
+        .attr("width", function(d){
+          if (colorList.includes(d.name)) return 40; else return 30;
+        });
   
-  var colorList = ["red", "light", "dark"];
+
   // make the image grow a little on mouse over and add the text details on click
   var setEvents = images
           // Append hero text
-          .on( 'click', function (d) { if (!colorList.includes(d.name)){
+          .on( 'click', function (d) { 
+            if (!colorList.includes(d.name)){
               var orgTitle = d.title.split(" ");
               var titleComp = "";
               var titleFinal = "";
@@ -166,27 +235,28 @@ function update() {
               else finalMedium = d.medium;
               titleFinal += titleComp;
               d3.select("h1").html("Title: " + titleFinal); 
-              d3.select("h2").html("<img src=" + d.img + " style= \"width:200px; height:300px;\">" );
-              d3.select("h3").html("<b>Maker:</b> " + d.maker + "<br>" + 
+              var maker_split = d.maker.split(" ").join("_");
+              d3.select("h2").html("<img src=" + d.img + " style= \"width:300px; \"> <br> <b>Maker:</b> <a href=https://en.wikipedia.org/wiki/" + maker_split + ">" + d.maker + "</a><br>" +  
                                     "<b>Medium:</b> " + finalMedium + "<br>" + 
                                     "<b>Creation Date:</b> " + Math.floor(d.creation_date/1) + "<br>" + 
                                     "<b>Accession Date:</b> " + d.accession_date
-                                    );} else{
-                                      d3.select("h1").html("Toggled: " + d.name);
-                                      d3.select("h2").html("Click on an image or color <br> family to view details!");
-                                      d3.select("h3").html("");
-                                    }
-              
-              })
+                                    );
 
-          .on( 'mouseenter', function() {
+            } else {
+              d3.select("h1").html("Toggled: " + d.name);
+              d3.select("h2").html("Click on an image or color <br> family to view details!");
+            }
+              
+          })
+
+          .on( 'mouseenter', function(d) {
             // select element in current context
             d3.select( this )
               .transition()
               .attr("x", function(d) { return -60;})
               .attr("y", function(d) { return -60;})
-              .attr("height", 100)
-              .attr("width", 100);
+              .attr("height", 120)
+              .attr("width", 120);
           })
           // set back
           .on( 'mouseleave', function() {
@@ -194,17 +264,13 @@ function update() {
               .transition()
               .attr("x", function(d) { return -25;})
               .attr("y", function(d) { return -25;})
-              .attr("height", 50)
-              .attr("width", 50);
+              .attr("height", function(d){
+                if (colorList.includes(d.name)) return 40; else return 30;
+              })
+              .attr("width", function(d){
+                if (colorList.includes(d.name)) return 40; else return 30;
+              });
           });
-
-  // Append hero name on roll over next to the node as well
-  nodeEnter.append("text")
-      .attr("class", "nodetext")
-      .attr("x", x_browser)
-      .attr("y", y_browser +15)
-      .attr("fill", tcBlack)
-      .text(function(d) { return d.hero; });
  
  
   // Exit any old nodes.
