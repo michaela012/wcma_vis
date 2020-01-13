@@ -41,10 +41,7 @@ so many collection images: view them all by color using collapsible force layout
  }
 
 --notes--
-clicking on a node collapses it. can they start collapsed? so the user can see the color label and 
-  expand what they want?
-need more differentiation. Sort by color, also light/dark (find brightness threshold -- my brightness 
-  ~equates to combining s&v parameters)
+clicking on a node collapses it. start collapsed?
 '''
 
 
