@@ -17,4 +17,4 @@ Color, by contrast, lends itself well to exploration. By selecting a color and b
 Since the purpose of the color classifications is to aid user experience, the bounds of the color categories are set loosely, so as to encourage a more even distribution of pieces. The three dominant colors in each collection image are isolated using k-means clustering. All pieces were grouped according to the most dominant color with the exception of sepia, as there is a large body of sepia images (1224, whereas the next largest category has 601). Images are only classified as sepia if the top three dominant color values are in this category, otherwise the piece is categorized based on the top non-sepia color. 
 
 
-Made for an independent study, Fall 2019, with advisors Iris Howley (CSCI) and Beth Fischer (WCMA).
+Made for an independent study, Fall 2019, with advisors Iris Howley (CSCI) and Beth Fischer (Digital Humanities, WCMA).
