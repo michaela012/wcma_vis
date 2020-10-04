@@ -1,6 +1,6 @@
 # wcma_vis
 
--- View the project [**here**](https://michaela012.github.io/wcma_vis/final_vis/)! --
+-- View the project [**here**](https://mikajs37.github.io/wcma_vis/final_vis/)! --
 
 ### languages and libraries
 The visualization itself was made using javascript (d3.js), HTML, and CSS. The underlying color analysis was done in python, using openCV. 
